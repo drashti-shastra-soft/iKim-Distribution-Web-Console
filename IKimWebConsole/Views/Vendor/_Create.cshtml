@@ -1,0 +1,73 @@
+﻿@model IKimWebConsole.Domain.Vendor
+
+<div class="modal fade" id="modal-vendor" tabindex="-1" aria-labelledby="ItemModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (Model.Id > 0)
+                {
+                    <h5 class="modal-title fs-5" id="ItemModalLabel">Edit Vendor</h5>
+                }
+                else
+                {
+                    <h5 class="modal-title fs-5" id="ItemModalLabel">Add Vendor</h5>
+                }
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                @Html.HiddenFor(m => m.Id)
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Name <span class="text-danger">*</span> </label>
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Enter Name" })
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label>Email Address <span class="text-danger">*</span> </label>
+                        @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control", placeholder = "Enter Email Address" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Phone Number <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", placeholder = "Enter Phone Number" })
+                        <span class="text-danger"></span>
+                    </div>
+
+                    <div class="col">
+                        <label>Alternate Phone Number </label>
+                        @Html.TextBoxFor(m => m.AlternatePhoneNumber, new { @class = "form-control", placeholder = "Enter Alternate Phone Number" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>GST Number </label>
+                        @Html.TextBoxFor(m => m.GSTNumber, new { @class = "form-control", placeholder = "Enter GST Number" })
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <div class="form-check">
+                            @Html.CheckBoxFor(m => m.IsActive, new { @class = "form-check-input" })
+                            <label class="form-check-label" for="isActiveCheck">Is Active?</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="javascript:void(0);" class="btn btn-primary btn-submit">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("~/custom-js/vendor/create.js")"></script>
+
+@Html.Hidden("NotificationType", (object)ViewBag.NotificationType)
+@Html.Hidden("NotificationMsg", (object)ViewBag.NotificationMsg)

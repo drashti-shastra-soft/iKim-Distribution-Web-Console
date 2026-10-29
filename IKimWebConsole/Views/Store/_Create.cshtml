@@ -1,0 +1,89 @@
+﻿@model IKimWebConsole.Domain.Store
+
+<div class="modal fade" id="modal-store" tabindex="-1" aria-labelledby="UserModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (Model.Id > 0)
+                {
+                    <h5 class="modal-title fs-5" id="UserModalLabel">Edit Store</h5>
+                }
+                else
+                {
+                    <h5 class="modal-title fs-5" id="UserModalLabel">Add Store</h5>
+                }
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                @Html.HiddenFor(m => m.Id)
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Name <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Enter Name" })
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label>Contact Person <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.ContactPerson, new { @class = "form-control", placeholder = "Enter Contact Person" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Phone Number <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", placeholder = "Enter Phone Number" })
+                        <span class="text-danger"></span>
+                    </div>
+
+                    <div class="col">
+                        <label>Alternative Phone Number</label>
+                        @Html.TextBoxFor(m => m.AlternativePhoneNumber, new { @class = "form-control", placeholder = "Alternative Phone Number" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Store Type <span class="text-danger">*</span></label>
+                        @Html.DropDownListFor(m => m.StoreTypeId, ViewBag.StoreTypes as List<SelectListItem>, "Select Store Type", new { @class = "form-control" })
+                        <span class="text-danger"></span>
+                    </div>
+
+                    <div class="col">
+                        <label>Parent Stores </label>
+                        @Html.DropDownListFor(m => m.ParentStoreId, ViewBag.ParentStores as List<SelectListItem>, "Select Parent Store", new { @class = "form-control" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6">
+                        <label>Pricing Tier <span class="text-danger">*</span></label>
+                        @Html.DropDownListFor(m => m.PricingTierId, ViewBag.PricingTiers as List<SelectListItem>, "Select Price Tier", new { @class = "form-control" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <div class="form-check">
+                            @Html.CheckBoxFor(m => m.IsActive, new { @class = "form-check-input" })
+                            <label class="form-check-label" for="isActiveCheck">Is Active?</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="javascript:void(0);" class="btn btn-primary btn-submit">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("~/custom-js/store/create.js")"></script>
+
+@Html.Hidden("NotificationType", (object)ViewBag.NotificationType)
+@Html.Hidden("NotificationMsg", (object)ViewBag.NotificationMsg)
+

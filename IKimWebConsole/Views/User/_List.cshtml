@@ -1,0 +1,151 @@
+﻿@model IKimWebConsole.Domain.UserLister
+
+<div class="card-header">
+    <a href="javascript:void(0)" class="btn btn-primary add-user float-right">Add User</a>
+</div>
+
+<div class="card-body">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    First Name
+                </th>
+                <th>
+                    Last Name
+                </th>
+                <th>
+                    Email Address
+                </th>
+                <th>
+                    Mobile Number
+                </th>
+                <th>
+                    User Type
+                </th>
+                <th>
+                    Store
+                </th>
+                <th class="text-center">
+                    Status
+                </th>
+                <th colspan="2" class="text-center">
+                    Action
+                </th>
+            </tr>
+
+            <tr>
+                <th>
+                    @Html.TextBoxFor(m => m.SearchCriteria.FirstName, new { @class = "form-control search-text" })
+                </th>
+                <th>
+                    @Html.TextBoxFor(m => m.SearchCriteria.LastName, new { @class = "form-control search-text" })
+                </th>
+                <th>
+                    @Html.TextBoxFor(m => m.SearchCriteria.EmailAddress, new { @class = "form-control search-text" })
+                </th>
+                <th>
+                    @Html.TextBoxFor(m => m.SearchCriteria.MobileNumber, new { @class = "form-control search-text" })
+                </th>
+                <th>
+                    @Html.TextBoxFor(m => m.SearchCriteria.UserType, new { @class = "form-control search-text" })
+                </th>
+                <th>
+                    @Html.TextBoxFor(m => m.SearchCriteria.Store, new { @class = "form-control search-text" })
+                </th>
+                <th>
+                    @Html.DropDownListFor(m => m.SearchCriteria.Status, ViewBag.Status as List<SelectListItem>, "Select Status", new { @class = "form-control search-dropdown" })
+                </th>
+                <th colspan="2" class="text-center">
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.List != null && Model.List.Count > default(int))
+            {
+                foreach (var item in Model.List)
+                {
+                    <tr>
+                        <td>@item.FirstName</td>
+                        <td>@item.LastName</td>
+                        <td>@item.EmailAddress</td>
+                        <td>@item.MobileNumber</td>
+                        <td>@item.UserType</td>
+                        <td>@item.Store</td>
+                        <td class="text-center">
+                            @if (item.IsActive)
+                            {
+                                <span class="badge badge-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Disabled</span>
+                            }
+                        </td>
+
+                        <td class="text-center">
+                            <a href="javascript:void(0);" data-id="@item.Id" class="icon-edit text-info"><i class="fas fa-edit"></i></a>
+                        </td>
+
+                        <td class="text-center">
+                            <a href="javascript:void(0);" data-id="@item.Id" class="icon-delete text-danger"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td class="text-center text-danger" colspan="9">
+                        There is currently no content to display
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<!-- /.card-body -->
+<div class="card-footer">
+    <div class="row">
+        <div class="col-12">
+            <div class="row footer-button-section">
+                <div class="col-lg-3 col-xl-3">
+                    <div class="page-per-size d-flex align-items-center">
+                        @Html.DropDownListFor(m => m.Pagination.PageSize, ViewBag.Pagination as List<SelectListItem> ?? new List<SelectListItem>(), new { @class = "form-control search-pagination set-page-size" })
+                        <label>entries per page</label>
+                    </div>
+                </div>
+                <style>
+                </style>
+                <div class="col-lg-4 offset-xl-1 col-xl-3 d-flex justify-content-center align-items-center">
+                    <div class="showing-entry d-flex align-items-center">
+                        <h3>@Model.Pagination.PaginationSummary </h3>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-xl-5">
+                    <div class="navigation-tab">
+                        <input type="button" value="First" class="btn btn-secondary navigation" data-direction="First" />
+                        <input type="button" value="Previous" class="btn btn-secondary navigation" data-direction="Previous" />
+                        <label> @Model.Pagination.CurrentPage / @Model.Pagination.TotalPage</label>
+                        <input type="button" value="Next" class="btn btn-secondary navigation" data-direction="Next" />
+                        <input type="button" value="Last" class="btn btn-secondary navigation" data-direction="Last" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(m => m.Pagination.Skip)
+    @Html.HiddenFor(m => m.Pagination.TotalRecord)
+</div>
+<!-- /.card-footer-->
+<script src="@Url.Content("~/custom-js/user/list.js")"></script>
+
+<script>
+        window.paginationConfig = {
+        pageSize: @Model.Pagination.PageSize,
+        totalPage: @Model.Pagination.TotalPage,
+        currentPage: @Model.Pagination.CurrentPage,
+        skip: @Model.Pagination.Skip,
+};
+</script>

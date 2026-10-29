@@ -1,0 +1,72 @@
+﻿@model IKimWebConsole.Domain.PartyOrderLine
+
+<div class="modal fade" id="modal-party-order-line" tabindex="-1" aria-labelledby="ItemModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (Model.Id > 0)
+                {
+                    <h5 class="modal-title fs-5" id="ItemModalLabel">Edit Item</h5>
+                }
+                else
+                {
+                    <h5 class="modal-title fs-5" id="ItemModalLabel">Add Item</h5>
+                }
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.PartyOrderId)
+                @Html.HiddenFor(m => m.UnitOfMeasureId)
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Item <span class="text-danger">*</span></label>
+                        @Html.DropDownListFor(m => m.ItemId, ViewBag.Items as List<SelectListItem>, "Select Item", new { @class = "form-control" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Quantity <span class="text-danger">*</span> </label>
+                        <div class="input-group">
+                            @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control qty-error", placeholder = "Enter Quantity" })
+                            <div class="input-group-append">
+                                @Html.TextBoxFor(m => m.UnitOfMeasure, new { @class = "form-control", @readonly = "readonly", style = "max-width:100px;" })
+                            </div>
+                        </div>
+                        <span class="text-danger"></span>
+                        <span class="text-danger qty-error"></span>
+                        <span class="text-danger unit-error"></span>
+                    </div>
+                    <div class="col">
+                        <label>Rate <span class="text-danger">*</span> </label>
+                        @Html.TextBoxFor(m => m.Rate, new { @class = "form-control", placeholder = "Enter Rate" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Total Amount <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.Total, new { @class = "form-control", placeholder = "Enter Total Amount" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="javascript:void(0);" class="btn btn-primary btn-submit">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("~/custom-js/party-order-line/create.js")"></script>
+
+@Html.Hidden("NotificationType", (object)ViewBag.NotificationType)
+@Html.Hidden("NotificationMsg", (object)ViewBag.NotificationMsg)

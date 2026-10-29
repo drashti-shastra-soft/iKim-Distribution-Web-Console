@@ -1,0 +1,49 @@
+﻿@model IKimWebConsole.Domain.StockItem
+
+<div class="modal fade" id="modal-stock-batch-item" tabindex="-1" aria-labelledby="ItemModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (Model.Id > 0)
+                {
+                    <h5 class="modal-title fs-5" id="ItemModalLabel">Edit Stock Item</h5>
+                }
+                else
+                {
+                    <h5 class="modal-title fs-5" id="ItemModalLabel">Add Stock Items</h5>
+                }
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.StockId)
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Item <span class="text-danger">*</span> </label>
+                        @Html.DropDownListFor(m => m.ItemId, ViewBag.Items as List<SelectListItem>, "Select Item", new { @class = "form-control" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Quantity</label>
+                        @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", placeholder = "Enter Quantity" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="javascript:void(0);" class="btn btn-primary btn-submit">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("~/custom-js/stock-item/create.js")"></script>
+
+@Html.Hidden("NotificationType", (object)ViewBag.NotificationType)
+@Html.Hidden("NotificationMsg", (object)ViewBag.NotificationMsg)
+

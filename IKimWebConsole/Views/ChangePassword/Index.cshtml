@@ -1,0 +1,59 @@
+﻿@model IKimWebConsole.Domain.ChangePassword
+@{
+    ViewBag.Title = "Change Password";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Dashboard")">Home</a></li>
+                        <li class="breadcrumb-item active">Change Password</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container-fluid" style="min-height: 80vh;">
+        <div class="card card-primary card-outline mb-4" style="width: 100%;">
+            <div class="card-header">
+                <div class="card-title">Change Password</div>
+            </div>
+            @using (Html.BeginForm("Index", "ChangePassword", FormMethod.Post))
+            {
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Current Password <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.CurrentPassword, new { @class = "form-control", placeholder = "Current Password", type = "password" })
+                        <span class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">New Password <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.NewPassword, new { @class = "form-control", placeholder = "New Password", type = "password" })
+                        <span class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm Password", type = "password" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary btn-submit">Submit</button>
+                </div>
+            }
+        </div>
+    </section>
+</div>
+
+@Html.Hidden("NotificationType", (object)ViewBag.NotificationType)
+@Html.Hidden("NotificationMsg", (object)ViewBag.NotificationMsg)
+
+<script src="@Url.Content("~/custom-js/change-password/index.js")"></script>

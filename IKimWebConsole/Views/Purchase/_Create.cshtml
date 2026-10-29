@@ -1,0 +1,70 @@
+﻿@model IKimWebConsole.Domain.Purchase
+
+<div class="modal fade" id="modal-purchase" tabindex="-1" aria-labelledby="ItemModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (Model.Id > 0)
+                {
+                    <h5 class="modal-title fs-5" id="ItemModalLabel">Edit Purchase</h5>
+                }
+                else
+                {
+                    <h5 class="modal-title fs-5" id="ItemModalLabel">Add Purchase</h5>
+                }
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                @Html.HiddenFor(m => m.Id)
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                @Html.TextBoxFor(m => m.Date, "{0:dd/MM/yyyy}", new { @class = "form-control datetimepicker-input", data_target = "#reservationdate" })
+                                <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                    <div class="input-group-text"> <i class="fa fa-calendar"></i> </div>
+                                </div>
+                            </div>
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Bill Number <span class="text-danger">*</span> </label>
+                        @Html.TextBoxFor(m => m.BillNumber, new { @class = "form-control", placeholder = "Enter Bill Number" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Vendor <span class="text-danger">*</span></label>
+                        @Html.DropDownListFor(m => m.VendorId, ViewBag.Vendors as List<SelectListItem>, "Select Vendor", new { @class = "form-control" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <div class="form-check">
+                            @Html.CheckBoxFor(m => m.IsActive, new { @class = "form-check-input" })
+                            <label class="form-check-label" for="isActiveCheck">Is Active?</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="javascript:void(0);" class="btn btn-primary btn-submit">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("~/custom-js/purchase/create.js")"></script>
+
+@Html.Hidden("NotificationType", (object)ViewBag.NotificationType)
+@Html.Hidden("NotificationMsg", (object)ViewBag.NotificationMsg)

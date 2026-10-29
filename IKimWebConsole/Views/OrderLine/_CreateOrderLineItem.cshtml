@@ -1,0 +1,120 @@
+﻿@model IKimWebConsole.Domain.OrderLine
+@{
+    var index = ViewData["ItemIndex"] as int? ?? 0;
+    var rowIndex = index + 1;
+}
+
+<style>
+    .item-entry {
+        position: relative;
+        margin-bottom: 20px;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    .number-block {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        height: 20px;
+        width: 20px;
+        color: #fff;
+        background: #f76c00;
+        margin-right: 5px;
+        border-radius: 3px;
+        font-size: 12px;
+    }
+
+    .btn-outline-primary {
+        color: #f76c00 !important;
+        border-color: #f76c00 !important;
+    }
+        .btn-outline-primary:hover {
+            color: #fff !important;
+            background-color: #f76c00 !important;
+            border-color: #f76c00 !important;
+        }
+</style>
+
+<div class="item-entry mb-2">
+
+    <div class="row no-gutters align-items-center mb-2">
+        <div class="col">
+            <label class="mb-0">
+                <span class="number-block">@rowIndex</span> Item
+            </label>
+        </div>
+
+        <div class="col-auto">
+            <a href="javascript:void(0);" class="btn btn-sm btn-outline-danger btn-remove-item" title="Remove Item">
+                <i class="fa fa-trash"></i>
+            </a>
+        </div>
+    </div>
+    <div class="row item-row">
+
+        <div class="col-12 mb-2">
+            <label>Item <span class="text-danger">*</span></label>
+            @Html.DropDownList("OrderLineItems[" + index + "].ItemId", (IEnumerable<SelectListItem>)ViewBag.Items, "Select Item", new { @class = "form-control ItemId" })
+            <span class="text-danger"></span>
+        </div>
+
+        <div class="col-12 mb-2">
+            <label>Quantity Requested <span class="text-danger">*</span></label>
+            <div class="row">
+                <div class="col-12 col-md-6 mb-2 mb-md-0">
+                    <div class="input-group">
+                        <input type="number" class="form-control Qty" name="OrderLineItems[@index].QuantityRequested" placeholder="Enter Quantity Requested" min="0" />
+
+                        <div class="input-group-append">
+                            <input type="hidden" class="UnitOfMeasureId" name="OrderLineItems[@index].UnitOfMeasureId" />
+                            <input type="text" class="form-control UnitOfMeasure" name="OrderLineItems[@index].UnitOfMeasure" readonly placeholder="Unit" style="max-width:100px;" />
+                        </div>
+                    </div>
+                    <span class="text-danger qty-error"></span>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label class="d-md-none">Rate</label>
+                    <input type="text" class="form-control Rate" name="OrderLineItems[@index].Rate" readonly placeholder="0" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 mb-2">
+            <label>Total</label>
+            <input type="text" class="form-control Total" name="OrderLineItems[@index].Amount" readonly placeholder="0" />
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on('click', '.btn-remove-item', function (e) {
+        e.preventDefault();
+
+        $(this).closest('.item-entry').remove();
+
+        $('.item-entry').each(function (i) {
+            $(this).find('.number-block').text(i + 1);
+        });
+    });
+
+    $(document).on('input', '.Qty', function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        calculateOrderLineTotal($(this).closest('.item-entry'));
+    });
+
+    $(document).on('input', '.Rate', function () {
+        this.value = this.value.replace(/[^0-9.]/g, '');
+        calculateOrderLineTotal($(this).closest('.item-entry'));
+    });
+
+    function calculateOrderLineTotal($row) {
+        var qty = parseFloat($row.find('.Qty').val()) || 0;
+        var rate = parseFloat($row.find('.Rate').val()) || 0;
+
+        $row.find('.Total').val((qty * rate).toFixed(2));
+    }
+</script>
+
+<script src="@Url.Content("~/custom-js/order-line/create.js")"></script>

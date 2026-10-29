@@ -1,0 +1,154 @@
+﻿.page {
+    justify-content: end;
+    display: flex;
+}
+
+.dataTab {
+    align-items: center;
+    display: flex;
+    gap: 5px;
+}
+
+.gap {
+    gap: 10px;
+}
+
+.FileuploadBox input {
+    min-height: 45px;
+}
+
+.src-text {
+    max-width: 150px;
+}
+
+.src-dropdown {
+    min-width: 150px;
+}
+
+.head-width {
+    width: 170px
+}
+
+label:not(.form-check-label):not(.custom-file-label) {
+    font-weight: normal !important;
+}
+
+.set-page-size {
+    width: fit-content;
+}
+
+.navigation-tab {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 10px;
+}
+
+@media (max-width: 767px) {
+    .navigation-tab {
+        justify-content: left;
+        margin-top: 10px;
+    }
+
+    .gap-10 {
+        gap: 10px;
+    }
+}
+
+.custom-loader {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(0 0 0 / 50%);
+    height: 100%;
+    width: 100%;
+    z-index: 99999;
+    display: none;
+}
+
+    .custom-loader .loader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+    }
+
+.showing-entry h3 {
+    margin-bottom: 0;
+    font-size: 16px;
+}
+
+.page-per-size {
+    gap: 5px;
+}
+
+@media (max-width: 991px) {
+    .page-per-size, .navigation-tab {
+        justify-content: center;
+    }
+
+    .footer-button-section {
+        gap: 15px;
+    }
+}
+
+.highlight {
+    background-color: #ffeeba;
+    transition: background-color 0.5s ease;
+}
+
+.disabled-link {
+    pointer-events: none;
+    text-decoration: none;
+    cursor: not-allowed;
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+    box-shadow: none;
+}
+
+
+.login-logo {
+    text-align: center;
+    padding: 15px 10px;
+}
+
+    .login-logo img {
+        width: 70%;
+        margin-top: 15px;
+    }
+
+.externalBody hr {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+
+
+/*.login-logo-img {
+    width: 180px;*/ /* control size */
+/*max-width: 100%;
+    height: auto;
+}*/
+
+/* Divider spacing like screenshot */
+/*.card hr {
+    margin: 10px 0;
+}*/
+
+.btn-primary {
+    background-color: #f76c00 !important;
+    border-color: #f76c00 !important;
+}
+
+.btn-light {
+    color: #ffffff !important;
+    background-color: #f76c00 !important;
+}
+
+
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active, .sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
+    background-color: #f76c00 !important;
+}

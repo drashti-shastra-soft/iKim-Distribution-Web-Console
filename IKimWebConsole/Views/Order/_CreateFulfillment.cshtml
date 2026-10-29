@@ -1,0 +1,96 @@
+﻿@model List<IKimWebConsole.Domain.OrderLine>
+
+<div class="modal fade" id="modal-create-fulfillment" tabindex="-1" aria-labelledby="OrderModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fs-5">Fulfillment</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>×</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="select-all-items" data-toggle="tooltip" data-placement="top" title="Click Here To Fulfill All Orders" />
+                            </th>
+                            <th>
+                                Item
+                            </th>
+                            <th>
+                                Quantity Requested
+                            </th>
+                            <th>
+                                Fulfilled Quantity
+                            </th>
+                            <th>
+                                Price
+                            </th>
+                            <th>
+                                Quantity Fulfilled
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Count > default(int))
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr class="item-fulfillment"> 
+                                    <td>
+                                        @if (item.QuantityRequested > item.FulfilledQuantity)
+                                        {
+                                            <input type="checkbox" class="row-checkbox" data-requested="@item.QuantityRequested" data-fulfilled="@item.FulfilledQuantity" data-toggle="tooltip" data-placement="top" title="Click Here To Fulfill These Order">
+                                        }
+                                    </td>
+                                    <td hidden>@item.Id</td>
+                                    <td hidden>@item.ItemId</td>
+                                    <td hidden>@item.OrderId</td>
+                                    <td>@item.Item</td>
+                                    <td>@item.QuantityRequested @item.UnitOfMeasure</td>
+                                    <td>@item.FulfilledQuantity @item.UnitOfMeasure</td>
+                                    <td>@item.Rate</td>
+                                    <td>
+                                        @if (item.QuantityRequested > item.FulfilledQuantity)
+                                        {
+                                            <input type="number" id="QtyFulfilled_@item.Id" name="QtyFulfilled_@item.Id" class="form-control qty-fulfilled" data-requested="@item.QuantityRequested" data-fulfilled="@item.FulfilledQuantity" value="@item.QuantityFulfilled" />
+
+                                            <span class="text-danger"></span>
+                                            @*<span class="text-danger stock-error"></span>*@
+                                        }
+                                        else
+                                        {
+                                            <span class="text-success">Already Fulfilled!</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td class="text-center text-danger" colspan="9">
+                                    There is currently no content to display
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="javascript:void(0);" class="btn btn-primary btn-submit">Submit</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("~/custom-js/item-fulfilment/create.js")"></script>
+
+@Html.Hidden("NotificationType", (object)ViewBag.NotificationType)
+@Html.Hidden("NotificationMsg", (object)ViewBag.NotificationMsg)

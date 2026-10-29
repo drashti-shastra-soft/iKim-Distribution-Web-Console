@@ -1,0 +1,38 @@
+﻿<div class="container-fluid">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-8 text-center">
+            <div class="error-page">
+                <div class="error-content">
+                    <!-- Responsive image -->
+                    <img src="/Content/assets/img/401.png"
+                         class="img-fluid mb-4" alt="Unauthorized" />
+
+                    <p>
+                        We will redirect you to the login page in
+                        <span id="countdown">5</span> seconds,
+                        or you can click
+                        <a href="/">here</a>
+                        to go to the login page immediately.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var counter = 5;
+        var redirectUrl = '@ViewBag.RedirectUrl';
+
+        var interval = setInterval(function () {
+            counter--;
+            $("#countdown").text(counter);
+
+            if (counter <= 0) {
+                clearInterval(interval);
+                window.location.href = redirectUrl;
+            }
+        }, 1000);
+    });
+</script>

@@ -1,0 +1,40 @@
+﻿@model List<IKimWebConsole.Domain.ItemPrice>
+
+<div class="card-body">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Price Tier
+                </th>
+                <th>
+                    Price
+                </th>                
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model != null && Model.Count > default(int))
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.PricingTierName
+                        </td>
+                        <td>
+                            @item.Price
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td class="text-center text-danger" colspan="2">
+                        There is currently no content to display
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

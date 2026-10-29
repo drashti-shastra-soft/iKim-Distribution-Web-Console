@@ -1,0 +1,45 @@
+﻿@model List<IKimWebConsole.Domain.Category>
+@{
+    ViewBag.Title = "Stock Update";
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Dashboard")">Home</a></li>
+                        <li class="breadcrumb-item active">Stock Update</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <!-- Default box -->
+        <div class="card">
+            @using (Ajax.BeginForm("List", "StockUpdate", new AjaxOptions() { UpdateTargetId = "divList", InsertionMode = InsertionMode.Replace, LoadingElementId = "loading-element" }, new { @id = "frmList" }))
+            {
+                <div id="divList">
+                    @Html.Action("List", "StockUpdate")
+                </div>
+            }
+        </div>
+        <!-- Default box -->
+        <div class="card">
+            @using (Ajax.BeginForm("UpdateStock", "StockUpdate", new AjaxOptions() { UpdateTargetId = "divCreate", InsertionMode = InsertionMode.Replace, LoadingElementId = "loading-element" }, new { @id = "frmCreate" }))
+            {
+                <div id="divCreate"></div>
+            }
+        </div>
+
+    </section>
+    <!-- /.content -->
+</div>
+

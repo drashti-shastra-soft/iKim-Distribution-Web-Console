@@ -1,0 +1,131 @@
+﻿@model IKimWebConsole.Domain.Credential
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Authentication | i'Kim</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/pluggins/fontawesome/all.min.css")">
+
+    <!--- Toastr -->
+    <link rel="stylesheet" href="@Url.Content("~/Scripts/plugins/toastr/toastr.min.css")">
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/dist/adminlte.min.css")">
+
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/pluggins/icheck-bootstrap/icheck-bootstrap.min.css")">
+
+    <!-- Css -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/style.css")" />
+
+    <style>
+        .submit {
+            display: flex;
+            justify-content: end;
+        }
+
+        .form-check-input {
+            margin-left: -23px;
+            margin-top: 6px;
+        }
+
+
+        _[class*=icheck-] > label {
+            padding-left: 23px !important;
+            min-height: 22px;
+            line-height: 22px;
+            display: inline-block;
+            position: relative;
+            vertical-align: top;
+            margin-bottom: 0;
+            font-weight: 400;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="login-page bg-body-secondary externalBody">
+
+    <div class="login-box">
+        <div class="login-logo">
+            <img src="@Url.Content("~/Content/assets/img/i'Kim.png")" class="img-fluid" alt="i'Kim" />
+        </div>
+
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Sign in to start your session</p>
+                @using (Html.BeginForm("Index", "Authentication", FormMethod.Post, new { id = "frmLogin" }))
+                {
+                    <div class="LoginFormSection">
+                        <div class="input-group mb-3">
+                            @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control", placeholder = "Email", id = "EmailAddress" })
+                            <span class="text-danger d-none"></span>
+                            <div class="input-group-text"><span class="fas fa-envelope"></span></div>
+                        </div>
+                        <div class="input-group mb-3">
+                            @Html.TextBoxFor(m => m.Password, new { @class = "form-control", placeholder = "Password", @type = "password", id = "Password" })
+                            <span class="text-danger d-none"></span>
+                            <div class="input-group-text"><span class="fas fa-lock"></span></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                                    @Html.CheckBoxFor(m => m.RememberMe, new { @class = "form-check-input", id = "RememberMe" })
+                                    <label class="form-check-label" for="flexCheckDefault">Remember Me</label>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="d-grid gap-2 text-right">
+                                    <a href="javascript:void(0);" class="btn btn-primary btn-submit">Sign In</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <p class="mb-1"><a href="@Url.Action("Index", "ForgotPassword")">Forgot your password?</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="@Url.Content("~/Scripts/plugins/jquery/jquery.min.js")"></script>
+
+    <!-- Bootstrap 4 -->
+    <script src="@Url.Content("~/Scripts/plugins/bootstrap/bootstrap.bundle.min.js")"></script>
+
+    <!-- AdminLTE App -->
+    <script src="@Url.Content("~/Scripts/dist/js/adminlte.min.js")"></script>
+
+    <!-- Toastr -->
+    <script src="@Url.Content("~/Scripts/plugins/toastr/toastr.min.js")"></script>
+
+    <!-- Custom Notification -->
+    <script src="@Url.Content("~/custom-js/layout/custom-notification.js")"></script>
+
+    <!-- Custom Functions -->
+    <script src="@Url.Content("~/custom-js/layout/custom-notification.js")"></script>
+    <script src=""></script>
+
+    <!-- custom event -->
+    <script src="@Url.Content("~/custom-js/layout/custom-document-event.js")"></script>
+
+    <!-- Custom Js -->
+    <script src="@Url.Content("~/custom-js/authentication/index.js")"></script>
+
+
+    @Html.Hidden("NotificationType", (object)ViewBag.NotificationType)
+    @Html.Hidden("NotificationMsg", (object)ViewBag.NotificationMsg)
+</body>
+
+</html>
+

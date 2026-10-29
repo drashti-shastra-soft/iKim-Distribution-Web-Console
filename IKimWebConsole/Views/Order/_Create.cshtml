@@ -1,0 +1,57 @@
+﻿@model IKimWebConsole.Domain.Order
+
+<div class="modal fade" id="modal-order" tabindex="-1" aria-labelledby="OrderModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (Model.Id > 0)
+                {
+                    <h5 class="modal-title fs-5" id="OrderModalLabel">Edit Order</h5>
+                }
+                else
+                {
+                    <h5 class="modal-title fs-5" id="OrderModalLabel">Add Order</h5>
+                }
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.ItemId)
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                @Html.TextBoxFor(m => m.Date, "{0:dd/MM/yyyy}", new { @class = "form-control datetimepicker-input", data_target = "#reservationdate" })
+                                <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                    <div class="input-group-text"> <i class="fa fa-calendar"></i> </div>
+                                </div>
+                            </div>
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Store <span class="text-danger">*</span></label>
+                        @Html.DropDownListFor(m => m.StoreId, ViewBag.Stores as List<SelectListItem>, "Select Store", new { @class = "form-control" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="javascript:void(0);" class="btn btn-primary btn-submit">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("~/custom-js/order/create.js")"></script>
+
+@Html.Hidden("NotificationType", (object)ViewBag.NotificationType)
+@Html.Hidden("NotificationMsg", (object)ViewBag.NotificationMsg)

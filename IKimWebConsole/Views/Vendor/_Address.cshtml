@@ -1,0 +1,67 @@
+﻿@model IKimWebConsole.Domain.Address
+
+<div class="modal fade" id="modal-address" tabindex="-1" aria-labelledby="AddressModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                @(Model.Id > 0 ? "Edit Address" : "Add Address")
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.VendorId)
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Line 1 <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.Line1, new { @class = "form-control", placeholder = "Enter Line 1" })
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label>Line 2</label>
+                        @Html.TextBoxFor(m => m.Line2, new { @class = "form-control", placeholder = "Enter Line 2" })
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Line 3 </label>
+                        @Html.TextBoxFor(m => m.Line3, new { @class = "form-control", placeholder = "Enter Line 3" })
+                    </div>
+
+                    <div class="col">
+                        <label>City <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.City, new { @class = "form-control", placeholder = "Enter City" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>State <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.State, new { @class = "form-control", placeholder = "Enter State" })
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label>Zip Code <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.ZipCode, new { @class = "form-control", placeholder = "Enter Zip Code" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="javascript:void(0);" class="btn btn-primary" data-form="frmSaveAddress">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("~/custom-js/vendor/upsert-address.js")"></script>
+
+@Html.Hidden("NotificationType", (object)ViewBag.NotificationType)
+@Html.Hidden("NotificationMsg", (object)ViewBag.NotificationMsg)
+
+
+

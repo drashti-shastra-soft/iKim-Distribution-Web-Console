@@ -1,0 +1,228 @@
+﻿@{
+    ViewBag.Title = "Daily Order";
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Dashboard")">Home</a></li>
+                        <li class="breadcrumb-item active">Daily Order</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-3 align-items-end">
+                    <div class="col-md-3">
+                        <div class="d-flex align-items-center">
+                            <label class="mb-0 mr-2" style="white-space: nowrap;"> From Date </label>
+                            <div class="input-group date flex-grow-1" id="fromDatePicker" data-target-input="nearest">
+                                <input type="text" id="txtFromDate" class="form-control datetimepicker-input" data-target="#fromDatePicker" autocomplete="off" />
+                                <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
+                                    <div class="input-group-text"> <i class="fa fa-calendar"></i> </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex align-items-center">
+                            <label class="mb-0 mr-2" style="white-space: nowrap;"> To Date </label>
+                            <div class="input-group date flex-grow-1" id="toDatePicker" data-target-input="nearest">
+                                <input type="text" id="txtToDate" class="form-control datetimepicker-input" data-target="#toDatePicker" autocomplete="off" />
+                                <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
+                                    <div class="input-group-text"> <i class="fa fa-calendar"></i> </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <button type="button" id="downloadSelectedPdf" class="btn btn-primary">
+                            <i class="fa fa-download"></i> Download PDF
+                        </button>
+                    </div>
+
+                </div>
+
+                <hr />
+                <div id="divCreate"></div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#fromDatePicker, #toDatePicker').on('change.datetimepicker', function () {
+            fnDailyOrders();
+        });
+
+        $('#fromDatePicker').datetimepicker({
+            format: 'DD-MM-YYYY',
+            defaultDate: moment()
+        });
+
+        $('#toDatePicker').datetimepicker({
+            format: 'DD-MM-YYYY',
+            defaultDate: moment()
+        });
+
+    });
+
+    // Download PDF
+    $("#downloadSelectedPdf").click(function () {
+        $.ajax({
+            url: "/DailyOrder/DownloadPdf",
+            type: "POST",
+            data: {
+                FromDate: $("#txtFromDate").val(),
+                ToDate: $("#txtToDate").val()
+            },
+            beforeSend: function () {
+                $("#loading-element").show();
+            },
+            success: function (response) {
+                if (response.StatusCode == "Ok") {
+                    downloadPdfFromBase64(response.Base64String, "Daily Order.pdf");
+                }
+                else {
+                    showToastr("error", response.Message);
+                }
+            },
+            error: function () {
+                showToastr("error", "Failed to download PDF.");
+            },
+            complete: function () {
+                $("#loading-element").hide();
+            }
+        });
+
+    });
+
+    // Base64 PDF Download
+    function downloadPdfFromBase64(base64String, fileName) {
+        const byteCharacters = atob(base64String);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (var i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: "application/pdf" });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+    }
+
+    function fnDailyOrders() {
+        $.ajax({
+            url: '/DailyOrder/DailyOrders',
+            type: 'POST',
+            data: {
+                FromDate: $("#txtFromDate").val(),
+                ToDate: $("#txtToDate").val()
+            },
+            beforeSend: function () {
+                $("#loading-element").show();
+            },
+            success: function (response) {
+
+                var data = response.Data || [];
+
+                var stores = [];
+
+                // Get unique stores
+                $.each(data, function (i, x) {
+
+                    if (!stores.some(s => s.StoreId == x.StoreId)) {
+
+                        stores.push({
+                            StoreId: x.StoreId,
+                            Name: x.Name
+                        });
+
+                    }
+
+                });
+
+
+                var html = "";
+
+
+                // Each store separate table
+                $.each(stores, function (i, store) {
+
+                    var lines = data
+                        .filter(function (x) {
+                            return x.StoreId == store.StoreId;
+                        })
+                        .sort(function (a, b) {
+                            return a.ItemName.localeCompare(b.ItemName);
+                        });
+
+
+                    // Store Name
+                    html += "<table class='table table-bordered table-striped mb-0'>";
+
+                    html += "<thead>";
+
+                    html += "<tr>";
+
+                    html += "<th style='font-weight:bold;'>" +
+                        store.Name +
+                        "</th>";
+
+                    html += "</tr>";
+
+                    html += "</thead>";
+
+
+                    // Items
+                    html += "<tbody>";
+
+
+                    $.each(lines, function (index, item) {
+
+                        html += "<tr>";
+
+                        html += "<td>";
+
+                        html += "<div class='d-flex justify-content-between align-items-center'>";
+
+                        // Item Name
+                        html += "<span>" +
+                            item.ItemName +
+                            "</span>";
+                        html += "<strong>" + item.QuantityRequested + " " + item.UnitOfMeasure + "</strong>";
+                        html += "</div>";
+                        html += "</td>";
+                        html += "</tr>";
+                    });
+                    html += "</tbody>";
+                    html += "</table>";
+                    html += "<div style='height:5px;'></div>";
+                });
+                $("#divCreate").html(html);
+            },
+            complete: function () {
+                $("#loading-element").hide();
+            },
+            error: function () {
+                $("#loading-element").hide();
+            }
+        });
+    }
+</script>

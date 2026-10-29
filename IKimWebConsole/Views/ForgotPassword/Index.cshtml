@@ -1,0 +1,119 @@
+﻿@model IKimWebConsole.Domain.ForgotPassword
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Authentication | i'Kim</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/pluggins/fontawesome/all.min.css")">
+
+    <!--- Toastr -->
+    <link rel="stylesheet" href="@Url.Content("~/Scripts/plugins/toastr/toastr.min.css")">
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/dist/adminlte.min.css")">
+
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/pluggins/icheck-bootstrap/icheck-bootstrap.min.css")">
+
+    <!-- style style -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/style.css")" />
+    <style>
+        .login-card-body, .register-card-body {
+            padding: 9px;
+        }
+
+        .custom-loader {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgb(0 0 0 / 50%);
+            height: 100%;
+            width: 100%;
+            z-index: 99999;
+            display: none;
+        }
+
+            .custom-loader .loader {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                width: 100%;
+            }
+    </style>
+
+</head>
+<body class="login-page bg-body-secondary externalBody">
+    <div class="login-box">
+        <div class="login-logo">
+            <img src="@Url.Content("~/Content/assets/img/i'Kim.png")" class="img-fluid" alt="i'Kim" />
+        </div>
+        <hr />
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Reset your password to continue</p>
+                @using (Html.BeginForm("Index", "ForgotPassword", FormMethod.Post, new { id = "frmForgotPassword" }))
+                {
+                    <div class="LoginFormSection">
+                        <div class="input-group mb-3">
+                            @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control", placeholder = "Email", id = "EmailAddress" })
+                            <span class="text-danger d-none"></span>
+                            <div class="input-group-text"><span class="fas fa-envelope"></span></div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <p class="mb-1"><a href="@Url.Action("Index", "Authentication")">Back To Login Page</a></p>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="d-grid gap-2 text-right">
+                                    <a href="javascript:void(0);" class="btn btn-primary btn-submit">Forgot Password</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="@Url.Content("~/Scripts/plugins/jquery/jquery.min.js")"></script>
+
+    <!-- Bootstrap 4 -->
+    <script src="@Url.Content("~/Scripts/plugins/bootstrap/bootstrap.bundle.min.js")"></script>
+
+    <!-- AdminLTE App -->
+    <script src="@Url.Content("~/Scripts/dist/js/adminlte.min.js")"></script>
+
+    <!-- Toastr -->
+    <script src="@Url.Content("~/Scripts/plugins/toastr/toastr.min.js")"></script>
+
+    <!-- Custom Notification -->
+    <script src="@Url.Content("~/custom-js/layout/custom-notification.js")"></script>
+
+    <!-- Custom Functions -->
+    <script src="@Url.Content("~/custom-js/layout/custom-functions.js")"></script>
+
+    <!-- custom event -->
+    <script src="@Url.Content("~/custom-js/layout/custom-document-event.js")"></script>
+
+    <!-- Custom Js -->
+    <script src="@Url.Content("~/custom-js/forgot-password/Index.js")"></script>
+
+    @Html.Hidden("NotificationType", (object)ViewBag.NotificationType)
+    @Html.Hidden("NotificationMsg", (object)ViewBag.NotificationMsg)
+
+</body>
+</html>

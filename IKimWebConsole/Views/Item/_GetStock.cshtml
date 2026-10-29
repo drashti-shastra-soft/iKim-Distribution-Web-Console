@@ -1,0 +1,55 @@
+﻿@model List<IKimWebConsole.Domain.StockUpdate>
+
+<div class="modal fade" id="modal-stock" tabindex="-1" aria-labelledby="OrderModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fs-5">@ViewBag.Item - Stock Updation History</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>×</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th> Category </th>
+                            <th> Date </th>
+                            <th> Quantity </th>
+                            <th> Reason </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Count > default(int))
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td> @item.Category </td>
+                                    <td> @(item.CreatedDate != null ? Convert.ToDateTime(item.CreatedDate).ToString("dd-MM-yyyy hh:mm tt"): "") </td>
+                                    <td> @(item.Operation == "Plus" ? "+ " + item.Quantity.ToString("0.00") : "- " + item.Quantity.ToString("0.00")) </td>
+                                    <td> @(string.IsNullOrWhiteSpace(item.Reason) ? "-" : item.Reason) </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td class="text-center text-danger" colspan="4">
+                                    There is currently no content to display
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>

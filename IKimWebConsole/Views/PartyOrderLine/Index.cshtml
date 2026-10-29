@@ -1,0 +1,78 @@
+﻿@model IKimWebConsole.Domain.PartyOrderLineLister
+@{
+    ViewBag.Title = "Party Order";
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Dashboard")">Home</a></li>
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "PartyOrder")">Party Order</a></li>
+                        <li class="breadcrumb-item active">Party Order Items</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <!-- Default box -->
+        <div class="card">
+            @using (Ajax.BeginForm("List", "PartyOrderLine", new AjaxOptions() { UpdateTargetId = "divList", InsertionMode = InsertionMode.Replace, LoadingElementId = "loading-element" }, new { @id = "frmList" }))
+            {
+                <div id="divList">
+                    @Html.Action("List", Model)
+                </div>
+            }
+        </div>
+        <!-- /.card -->
+        <!-- Default box -->
+        <div class="card">
+            @using (Ajax.BeginForm("Create", "PartyOrderLine", new AjaxOptions() { UpdateTargetId = "divCreate", InsertionMode = InsertionMode.Replace, LoadingElementId = "loading-element", OnSuccess = "handleCreateResponse", OnFailure = "handleCreateResponse" }, new { @id = "frmCreate" }))
+            {
+                <div id="divCreate"></div>
+            }
+        </div>
+        <!-- /.card -->
+    </section>
+    <!-- /.content -->
+</div>
+
+<script>
+    function handleCreateResponse(response) {
+        let parsed;
+        try {
+            parsed = typeof response === "string" ? JSON.parse(response) : response;
+        } catch (e) {
+            parsed = null;
+        }
+        if (parsed && parsed.StatusCode) {
+            if (parsed.StatusCode === "Unauthorized") {
+                showToastr('error', 'Session Expired! We will redirect you to the login page in 3 seconds.');
+                setTimeout(function () {
+                    window.location.href = parsed.RedirectUrl;
+                }, 3000);
+            } else if (parsed.StatusCode === "Ok") {
+                showToastr(parsed.NotificationType, parsed.NotificationMsg);
+                setTimeout(function () {
+                    $('#frmList').submit();
+                }, 1000);
+            } else {
+                showToastr(parsed.NotificationType, parsed.NotificationMsg);
+            }
+        }
+        $('.modal').modal('hide');
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+    }
+</script>
+
+

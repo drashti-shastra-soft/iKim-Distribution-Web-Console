@@ -1,0 +1,105 @@
+﻿@model IKimWebConsole.Domain.PartyOrder
+
+<div class="modal fade" id="modal-party-order" tabindex="-1" aria-labelledby="PartyOrderModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (Model.Id > 0)
+                {
+                    <h5 class="modal-title fs-5" id="PartyOrderModalLabel">Edit Party Order</h5>
+                }
+                else
+                {
+                    <h5 class="modal-title fs-5" id="PartyOrderModalLabel">Add Party Order</h5>
+                }
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                @Html.HiddenFor(m => m.Id)
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Store <span class="text-danger">*</span> </label>
+                        @Html.DropDownListFor(m => m.StoreId, ViewBag.Stores as List<SelectListItem>, "Select Store", new { @class = "form-control" })
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label>Name <span class="text-danger">*</span> </label>
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Enter Name" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Mobile Number <span class="text-danger">*</span> </label>
+                        @Html.TextBoxFor(m => m.MobileNumber, new { @class = "form-control", placeholder = "Enter Mobile Number" })
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label>Delivery Date Time</label>
+                        @Html.TextBoxFor(m => m.DeliveryDateTime, new { @class = "form-control", type = "datetime-local", @Value = DateTime.Now.ToString("yyyy-MM-ddTHH:mm") })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Deliver Location <span class="text-danger">*</span> </label>
+                        @Html.TextAreaFor(m => m.DeliveryLocation, new { @class = "form-control", placeholder = "Enter Delivery Location", rows = "2" })
+                        <span class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Num Cups </label>
+                        @Html.TextBoxFor(m => m.NumOfCups, new { @class = "form-control", placeholder = "Enter Num Cups" })
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label>Num Spoon </label>
+                        @Html.TextBoxFor(m => m.NumOfSpoons, new { @class = "form-control", placeholder = "Enter Num Spoons" })
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label>Num Glass </label>
+                        @Html.TextBoxFor(m => m.NumOfGlass, new { @class = "form-control", placeholder = "Enter Num Glass" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-6">
+                        <label>With Waiter <span class="text-danger">*</span></label>
+                        @Html.DropDownListFor(m => m.WithWaiter, new List<SelectListItem> { new SelectListItem { Text = "Yes", Value = "Yes" }, new SelectListItem { Text = "No", Value = "No" } }, "Select With Waiter", new { @class = "form-control" })
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="col" id="waiterChargeDiv" style="display:none;">
+                        <label>Waiter Charges </label>
+                        @Html.TextBoxFor(m => m.WaiterCharge, new { @class = "form-control", placeholder = "Enter Waiter Charges" })
+                        <span class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Narration </label>
+                        @Html.TextAreaFor(m => m.Narration, new { @class = "form-control", placeholder = "Enter Narration", rows = "3" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="javascript:void(0);" class="btn btn-primary btn-submit">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("~/custom-js/party-order/create.js")"></script>
+
+@Html.Hidden("NotificationType", (object)ViewBag.NotificationType)
+@Html.Hidden("NotificationMsg", (object)ViewBag.NotificationMsg)

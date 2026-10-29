@@ -1,0 +1,170 @@
+﻿@model IKimWebConsole.Domain.Item
+
+<div class="modal fade" id="modal-item" tabindex="-1" aria-labelledby="ItemModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (Model.Id > 0)
+                {
+                    <h5 class="modal-title fs-5" id="ItemModalLabel">Edit Item</h5>
+                }
+                else
+                {
+                    <h5 class="modal-title fs-5" id="ItemModalLabel">Add Item</h5>
+                }
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.FileName)
+                @Html.HiddenFor(m => m.MimeType)
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Category <span class="text-danger">*</span></label>
+                        @Html.DropDownListFor(m => m.CategoryId, ViewBag.Categories as List<SelectListItem>, "Select Category", new { @class = "form-control" })
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label>Name <span class="text-danger">*</span> </label>
+                        <div class="input-group">
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control qty-error", placeholder = "Enter Name" })
+                            <div class="input-group-append">
+                                @Html.DropDownListFor(m => m.UnitOfMeasureId, ViewBag.UnitOfMeasures as List<SelectListItem>, "Unit", new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <span class="text-danger"></span>
+                        <span class="text-danger qty-error"></span>
+                        <span class="text-danger unit-error"></span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6">
+                        <label>Factory Stock </label>
+                        @Html.TextBoxFor(m => m.FactoryStock, new { @class = "form-control", placeholder = "Enter Factory Stock" })
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="col" id="godownStockRow">
+                        <label>Godown Stock </label>
+                        @Html.TextBoxFor(m => m.GodownStock, new { @class = "form-control", placeholder = "Enter Godown Stock" })
+                        <span class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>Description</label>
+                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", placeholder = "Enter Description", rows = "3" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <label>HSN Code </label>
+                        @Html.TextBoxFor(m => m.HSNCode, new { @class = "form-control", placeholder = "Enter HSN Code" })
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="col-6">
+                        <label>GST <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.GST, new { @class = "form-control", placeholder = "Enter GST", @readonly = "readOnly" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label>CGST <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.CGST, new { @class = "form-control", placeholder = "Enter CGST" })
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label>SGST <span class="text-danger">*</span></label>
+                        @Html.TextBoxFor(m => m.SGST, new { @class = "form-control", placeholder = "Enter SGST" })
+                        <span class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="file">Image</label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="file" name="file" accept=".jpg,.jpeg,.png">
+                        <label class="custom-file-label" for="file">
+                            @(string.IsNullOrEmpty(Model.FileName) ? "Choose file" : Model.FileName)
+                        </label>
+                    </div>
+                </div>
+
+                @*<div class="input-group mb-3">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="file" name="file">
+                <label class="custom-file-label" for="file">
+                    @(string.IsNullOrEmpty(Model.FileName) ? "Choose file" : Model.FileName)
+                </label>
+            </div>
+        </div>*@
+
+                @*<div class="row mb-3">
+            <div class="col">
+                <label for="ItemImage" class="form-label"> Image </label>
+                <input class="form-control" type="file" id="file" name="file" accept=".jpg,.jpeg,.png" style="padding: 3px;" data-toggle="tooltip" data-placement="top" title="Max 2MB">
+            </div>
+        </div>*@
+                <div class="row mb-2">
+                    <div class="col">
+                        <div class="form-check">
+                            @Html.CheckBoxFor(m => m.IsRetailerCanOrder, new { @class = "form-check-input", })
+                            <label class="form-check-label" for="isRetailerCanOrderCheck">Is Retailer Can Order?</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <div class="form-check">
+                            @Html.CheckBoxFor(m => m.IsRawMaterial, new { @class = "form-check-input", })
+                            <label class="form-check-label" for="isRawMaterialCheck">Is Raw Material?</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2" id="priceSection">
+                    <div class="col">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th hidden>Tier</th>
+                                    <th>Tier</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.Prices.Count; i++)
+                                {
+                                    <tr>
+                                        <td hidden>@Html.HiddenFor(m => m.Prices[i].PricingTierId)</td>
+                                        <td>@Model.Prices[i].PricingTierName</td>
+                                        <td>@Html.TextBoxFor(m => m.Prices[i].Price, new { type = "number", step = "1.00", @class = "form-control" })</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <div class="form-check">
+                            @Html.CheckBoxFor(m => m.IsActive, new { @class = "form-check-input" })
+                            <label class="form-check-label" for="isActiveCheck">Is Active?</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="javascript:void(0);" class="btn btn-primary btn-submit">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="@Url.Content("~/custom-js/item/create.js")"></script>
+
+@Html.Hidden("NotificationType", (object)ViewBag.NotificationType)
+@Html.Hidden("NotificationMsg", (object)ViewBag.NotificationMsg)

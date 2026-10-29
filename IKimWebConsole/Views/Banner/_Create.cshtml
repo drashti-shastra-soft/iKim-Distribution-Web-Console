@@ -1,0 +1,218 @@
+﻿@model IKimWebConsole.Domain.Banner
+
+<style>
+    .myDocument-holder {
+        padding: 20px;
+    }
+
+    #userDropzone {
+        min-height: 220px;
+        border: 2px dashed #ff6a00 !important;
+        border-radius: 12px;
+        background: #fffaf5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.3s ease-in-out;
+        cursor: pointer;
+    }
+
+        #userDropzone:hover {
+            background: #fff3e8;
+            border-color: #ff7f27 !important;
+        }
+
+        #userDropzone .dz-message {
+            margin: 0;
+            text-align: center;
+        }
+
+        #userDropzone .uploadme img {
+            width: 80px;
+            margin-bottom: 15px;
+        }
+
+    .uploadTitle {
+        font-size: 28px;
+        font-weight: 600;
+        color: #333;
+        margin: 0;
+    }
+
+    #existing-documents {
+        margin-top: 35px;
+    }
+
+    .UploadImageCard {
+        position: relative;
+        border: 1px solid #e5e5e5;
+        border-radius: 14px;
+        overflow: hidden;
+        padding: 10px;
+        transition: 0.3s;
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+        .UploadImageCard:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .UploadImageCard img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .UploadImageCard .card-body {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            opacity: 0;
+            transition: 0.3s ease-in-out;
+        }
+
+        .UploadImageCard:hover .card-body {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+    .btn-delete-image {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        font-size: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .file-card {
+        margin-bottom: 25px;
+    }
+
+    .card {
+        border-radius: 14px;
+        border: none;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+    }
+</style>
+
+<div class="modal fade" id="modal-banner" tabindex="-1" aria-labelledby="BannerModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (Model.Id > 0)
+                {
+                    <h5 class="modal-title fs-5" id="BannerModalLabel">Edit Banner</h5>
+                }
+                else
+                {
+                    <h5 class="modal-title fs-5" id="BannerModalLabel">Add Banner</h5>
+                }
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                @Html.HiddenFor(m => m.Id)
+
+                <section class="myDocument-holder">
+                    <div class="container-fluid">
+                        <div class="dropzone mb-4" id="userDropzone" style="border: 2px solid #f76c00">
+                            <div class="dz-message uploadme">
+                                <img src="~/Content/assets/img/uploadfiles.png" class="img-fluid uploadme" />
+                                <h3 class="uploadTitle">Drop Banner here or click to upload</h3>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col">
+                                <div class="form-check">
+                                    @Html.CheckBoxFor(m => m.IsActive, new { @class = "form-check-input" })
+                                    <label class="form-check-label" for="isActiveCheck">Is Active?</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="javascript:void(0);" class="btn btn-primary btn-submit">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $(".btn-submit").click(function () {
+            if (fnValidation()) {
+                bannerDropzone.processQueue();
+            }
+        });
+
+        var notificationType = $.trim('@ViewBag.NotificationType');
+        var notificationMsg = $.trim('@ViewBag.NotificationMsg');
+
+        if (notificationType != '' && notificationMsg != '') {
+            showToastr(notificationType, notificationMsg);
+            $('.modal').modal('hide');
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+            $('#frmList').submit();
+        }
+    });
+
+    function fnValidation() {
+        var isValid = true;
+        if (bannerDropzone.files.length === 0) {
+            showToastr("error", "Please select banner image!");
+            isValid = false;
+        }
+        return isValid;
+    }
+    Dropzone.autoDiscover = false;
+
+    var bannerDropzone = new Dropzone("#userDropzone", {
+        url: "/Banner/Create",
+        autoProcessQueue: false,
+        uploadMultiple: false,
+        parallelUploads: 1,
+        paramName: "file",
+        maxFiles: 1,
+        maxFilesize: 3,
+        acceptedFiles: ".jpg,.jpeg,.png,.pdf",
+        addRemoveLinks: true,
+
+        init: function () {
+            this.on("sending", function (file, xhr, formData) {
+                formData.append("Id", $("#Id").val());
+                formData.append("IsActive", $("#IsActive").is(":checked"));
+            });
+            this.on("success", function (file, response) {
+                if (response.type === "success") {
+                    showToastr("success", response.message);
+                    $('.modal').modal('hide');
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
+                    $('#frmList').submit();
+                }
+                else {
+                    showToastr("error", response.message);
+                }
+                this.removeAllFiles(true);
+            });
+            this.on("error", function () {
+                showToastr("error", "Upload failed!");
+                this.removeAllFiles(true);
+            });
+            this.on("maxfilesexceeded", function (file) {
+                this.removeAllFiles();
+                this.addFile(file);
+            });
+        }
+    });
+</script>

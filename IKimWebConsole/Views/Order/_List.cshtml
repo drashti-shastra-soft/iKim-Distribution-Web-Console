@@ -1,0 +1,145 @@
+﻿@model IKimWebConsole.Domain.OrderLister
+
+<div class="card-header">
+    <a href="javascript:void(0)" class="btn btn-primary add-order float-right ml-1">Add Order</a>
+    <a href="javascript:void(0);" id="downloadSelectedPdf" class="btn btn-danger float-right ml-1"><i class="fa fa-download"></i> Download PDF</a>
+    <a href="javascript:void(0);" id="downloadSelecteddailyorders" class="btn btn-success float-right"><i class="fa fa-download"></i> Download Daily Order</a>
+</div>
+
+<div class="card-body">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th> </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Store
+                </th>
+                <th>
+                    Amount
+                </th>
+                <th>
+                    Status
+                </th>
+                <th colspan="5" class="text-center">
+                    Action
+                </th>
+            </tr>
+            <tr>
+                <th class="text-center" width="40">
+                    <input type="checkbox" id="checkAll" />
+                </th>
+                <th>
+                </th>
+                <th>
+                    @Html.TextBoxFor(m => m.SearchCriteria.Store, new { @class = "form-control search-text" })
+                </th>
+                <th></th>
+                <th></th>
+                <th colspan="5" class="text-center"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.List != null && Model.List.Count > default(int))
+            {
+                foreach (var item in Model.List)
+                {
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="pdf-checkbox" data-id="@item.Id" data-itemid="@item.ItemId" />
+                        </td>
+                        <td>@string.Format("{0:dd-MM-yyyy}", item.Date)</td>
+                        <td>@item.Store</td>
+                        <td class="text-right">@item.Amount</td>
+                        <td class="text-center">
+                            @if (item.Status == "Pending")
+                            {
+                                <span class="badge badge-danger">Pending</span>
+                            }
+                            else if (item.Status == "Partially Fulfilled")
+                            {
+                                <span class="badge badge-warning">Partially Fulfilled</span>
+                            }
+                            else if (item.Status == "Fulfilled")
+                            {
+                                <span class="badge badge-success">Fulfilled</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-secondary">@item.Status</span>
+                            }
+                        </td>
+
+                        <td class="text-center">
+                            <a href="javascript:void(0);" data-id="@item.Id" class="icon-document text-primary" data-store="@item.Store" title="Click Here To See The Items"><i class="fas fa-list-alt"></i></a>
+                        </td>
+
+                        <td class="text-center">
+                            <a href="javascript:void(0);" data-id="@item.Id" class="icon-fulfillment-log text-success" title="Click Here To Fulfilled Orders"><i class="fas fa-box"></i></a>
+                        </td>
+                        <td class="text-center">
+                            <a href="javascript:void(0);" data-id="@item.Id" class="icon-edit-order text-info"><i class="fas fa-edit"></i></a>
+                        </td>
+
+                        <td class="text-center">
+                            <a href="javascript:void(0);" data-id="@item.Id" class="icon-delete-order text-danger"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td class="text-center text-danger" colspan="11">
+                        There is currently no content to display
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="card-footer">
+    <div class="row">
+        <div class="col-12">
+            <div class="row footer-button-section">
+                <div class="col-lg-3 col-xl-3">
+                    <div class="page-per-size d-flex align-items-center">
+                        @Html.DropDownListFor(m => m.Pagination.PageSize, ViewBag.Pagination as List<SelectListItem> ?? new List<SelectListItem>(), new { @class = "form-control search-pagination set-page-size" })
+                        <label>entries per page</label>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 offset-xl-1 col-xl-3 d-flex justify-content-center align-items-center">
+                    <div class="showing-entry d-flex align-items-center">
+                        <h3>@Model.Pagination.PaginationSummary </h3>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-xl-5">
+                    <div class="navigation-tab">
+                        <input type="button" value="First" class="btn btn-secondary navigation" data-direction="First" />
+                        <input type="button" value="Previous" class="btn btn-secondary navigation" data-direction="Previous" />
+                        <label> @Model.Pagination.CurrentPage / @Model.Pagination.TotalPage</label>
+                        <input type="button" value="Next" class="btn btn-secondary navigation" data-direction="Next" />
+                        <input type="button" value="Last" class="btn btn-secondary navigation" data-direction="Last" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(m => m.Pagination.Skip)
+    @Html.HiddenFor(m => m.Pagination.TotalRecord)
+</div>
+
+<script src="@Url.Content("~/custom-js/order/list.js")"></script>
+
+<script>
+        window.paginationConfig = {
+        pageSize: @Model.Pagination.PageSize,
+        totalPage: @Model.Pagination.TotalPage,
+        currentPage: @Model.Pagination.CurrentPage,
+        skip: @Model.Pagination.Skip,
+};
+</script>
